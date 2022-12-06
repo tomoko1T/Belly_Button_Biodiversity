@@ -27,12 +27,12 @@ init();
 function optionChanged(newSample) {
   // Fetch new data each time a new sample is selected
   buildMetadata(newSample);
-  buildCharts(newSample);
-  
+  buildCharts(newSample); 
 }
+
 /// Note: newSample refers to the value of the selected menu option. 
 /// In index.html, onchange=optionChanged(this.value)passes the selected menu option's value to the optionChanged()function. 
-/// This function gives this information the argument name newSample.  In other words,this.value and newSample are equivalent.
+/// This function gives this information the argument name newSample.  In other words,this.value (in HTML) and newSample are equivalent.
 
 /// When a change takes place to the dropdown menu, two things will need to occur: buildMetadata() &  buildCharts()
 
@@ -72,16 +72,11 @@ function buildCharts(sample) {
     var sampleresult = sampleArray[0];
     console.log(sampleresult)
 
-    // 6. Create variables that hold the otu_ids, otu_labels, and sample_values. /// have the array in descending order and slice top 10.  
+    // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.   
     var otuids = sampleresult.otu_ids;
     var otulabels = sampleresult.otu_labels;
     var samplevalues = sampleresult.sample_values;
-
-    /// did not work but can create variable which can hold multible objects? 
-    ///var selectedsample = Object.assign(otu_ids,otu_labels,sample_values);
-    ///var sortedSample = selectedsample.sort((a,b) => b.sample_values - a.sample_values);
-    ///var slicedSample = sortedSample.slice(0, 10);
-
+  
     /// To display the top 10 bacterial species (OTUs) when an individual’s ID is selected
     /// The horizontal bar chart will display the sample_values as the values, the otu_ids as the labels,
     /// and the otu_labels as the hover text for the bars on the chart.
@@ -92,18 +87,19 @@ function buildCharts(sample) {
 
     var yticks = [{
       x: samplevalues.slice(0,10).reverse(),
-      y: otuids.slice(0,10).map(object => object.otu_id).reverse(),
+      y: otuids.slice(0,10).map(otu_id => `OTU${otu_id}`).reverse(),
       text: otulabels.slice(0,10).reverse(),
       type: "bar",
-      orientaion: "h"
+      orientation: "h",
+      marker: {
+        color:'tomato',
+      }
     }];
-    
-    ///  x: sample_valued.map(object => object.sample_values),
-    ///  y: slicedSample .map(object => object.otu_id),
-    ///  text: slicedSample.map(object => object.otu_id),
-    
+   
+    /// .map(object => `OTU${object}`).reverse() --> converting discrate stiring
+     
     // 8. Create the trace for the bar chart. 
-    var barData = [yticks];
+    var barData = yticks;
         
     // 9. Create the layout for the bar chart. 
     var barLayout = {
@@ -111,31 +107,20 @@ function buildCharts(sample) {
     };
     
     // 10. Use Plotly to plot the data with the layout. 
-    Plotly.newPlot("plot", barData, barLayout)
-  });
-}
+    Plotly.newPlot("bar", barData, barLayout);
+  
 
-
-// Bar and Bubble charts
-// Create the buildCharts function.
-function buildCharts(sample) {
-  // Use d3.json to load and retrieve the samples.json file 
-  d3.json("samples.json").then((data) => {
-    
-
-    // Deliverable 1 Step 10. Use Plotly to plot the data with the layout. ??? 
-    Plotly.newPlot("plot", barData, barLayout); 
-
-    // 1. Create the trace for the bubble chart.
+  // Bar and Bubble charts
+    // 1. Create the trace object for the bubble chart 
     var bubbleData = [{
        x: otuids,
        y: samplevalues,
        text: otulabels,
-       mode: 'makers',
+       mode: 'markers',
        marker: {
-        size: samplevalues,
-        color: otuids,
-        colorscale: 'Y1OrRd', 
+         size: samplevalues,
+         color: otuids,
+         colorscale: 'YlOrRd'          
        }
     }];
 
@@ -146,9 +131,41 @@ function buildCharts(sample) {
     };
 
     // 3. Use Plotly to plot the data with the layout.
-    Plotly.newPlot("bubble", bubbleData, bubbleLayout); 
-  });
+    Plotly.newPlot("bubble", bubbleData, bubbleLayout);   
+
+  //Create the trace for the gauge chart.
+    ///1. create a variable that converts the washing frequency to a floating point number.  
+    /// Need to pull metadata again here because this block is outside of function buildMetadata(sample) 
+     var metadata = data.metadata;    
+     var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
+     var result = resultArray[0];
+     console.log(result.wfreq)
+     var washFreq = parseInt(result.wfreq);
+     
+     var gaugeData = [
+          { 
+            domain: { x:[0,1], y:[0,1]},
+            value: washFreq,
+           // For the title object, assign the title as a string using HTML syntax to the text property.
+            title: { text: "Belly Button Washing Frequency Scrubs per Week"},
+            type: "indicator",
+            mode: "gauge+number",   
+            gauge: {
+              bar: {color: 'maroon'},
+              bgcolor: "white",
+              axis: { range: [null, 10] },
+              steps: [
+                { range: [0, 250], color: "lightsalmon" },
+                { range: [250, 400], color: "mistyrose" }
+      ]}  
+  }];
+   //   https://plotly.com/javascript/gauge-charts/
+   //   https://matplotlib.org/3.1.0/gallery/color/named_colors.html
+
+  // 5. Create the layout for the gauge chart.
+    var gaugeLayout = { width: 600, height: 500, margin: { t: 0, b: 0 }};
+  // 6. Use Plotly to plot the gauge data and layout.
+  Plotly.newPlot("gauge", gaugeData, gaugeLayout);
+
+});
 }
-
-
-

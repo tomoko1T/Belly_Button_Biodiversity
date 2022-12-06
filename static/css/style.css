@@ -1,0 +1,15 @@
+body {
+
+    color: #0f0e0e;
+    font-family: "Georgia", serif;
+    
+  }
+
+div
+    .bolded {font-weight: bold;}
+
+.jumbotron {
+   background-image: url("../images/bacteria2.jpg");
+   background-size: 85% 80%;
+   text-align: center;
+  }
