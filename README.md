@@ -10,8 +10,7 @@ JavaScript and Plotly D3 are used for the charts.
   
 - Gauge chart displays the weekly washing frequency’s value of each volunteer's data when its ID is selected.
 
-HTML and bootstrap
-The dashboard is customized the
+The dashboard is customized using HTML and bootstrap.
 
 - Image is added in header section.
 
