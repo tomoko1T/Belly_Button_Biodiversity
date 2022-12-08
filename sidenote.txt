@@ -1,5 +1,0 @@
-belly button biodiversity github
-
-python -m http.server
-
-   colorscale: 'YlOrRd',

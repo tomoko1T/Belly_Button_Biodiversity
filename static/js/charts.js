@@ -155,8 +155,11 @@ function buildCharts(sample) {
               bgcolor: "white",
               axis: { range: [null, 10] },
               steps: [
-                { range: [0, 250], color: "lightsalmon" },
-                { range: [250, 400], color: "mistyrose" }
+                { range: [0, 2], color: "salmon" },
+                { range: [2, 4], color: "darksalmon" },
+                { range: [4, 6], color: "lightsalmon" },
+                { range: [6, 8], color: "lightcoral" },
+                { range: [8, 10], color: "mistyrose" }
       ]}  
   }];
    //   https://plotly.com/javascript/gauge-charts/
