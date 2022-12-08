@@ -3,6 +3,8 @@
 ## Background: 
 The research was conducted by collecting the samples of the volunteers who are interested in selling their bacteria taken from their bellies to Improbable Beef.  Some of them will be suitable for synthetic beef production.  The report was created using Plotly to vizualize the outcome of the research.  It presents the top 10 bacteria species (OTUs) and the weekly washing frequency’s value of an individual volunteer when their ID is selected.  
 
+The webpage is deployed at (https://tomoko1t.github.io/Belly_Button_Biodiversity/)
+
 ## Result and Summary: 
 
 JavaScript and Plotly D3 are used for the charts. 
